@@ -4,18 +4,18 @@ interface ChipProps {
   label: string;
   active: boolean;
   onClick: () => void;
-  variant?: 'violeta' | 'cian';
+  variant?: 'primario' | 'secundario';
   height?: number;
   fontSize?: number;
   padding?: string;
 }
 
 const ESTILOS = {
-  violeta: { bg: 'rgba(124,92,255,.16)', bd: 'rgba(124,92,255,.40)', fg: '#9579ff' },
-  cian: { bg: 'rgba(0,212,255,.14)', bd: 'rgba(0,212,255,.42)', fg: '#00D4FF' },
+  primario: { bg: 'rgba(var(--accent-rgb),.16)', bd: 'rgba(var(--accent-rgb),.40)', fg: 'var(--accent-strong)' },
+  secundario: { bg: 'rgba(var(--accent-2-rgb),.16)', bd: 'rgba(var(--accent-2-rgb),.42)', fg: 'var(--accent-2)' },
 };
 
-export default function Chip({ label, active, onClick, variant = 'violeta', height = 32, fontSize = 12.5, padding = '0 14px' }: ChipProps) {
+export default function Chip({ label, active, onClick, variant = 'primario', height = 32, fontSize = 12.5, padding = '0 14px' }: ChipProps) {
   const on = ESTILOS[variant];
   return (
     <button

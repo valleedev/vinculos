@@ -40,7 +40,7 @@ export default function MapaScreen() {
             <div className="mono" style={{ textAlign: 'right', fontSize: 12, fontWeight: 600, color: 'var(--fg-2)' }}>
               {total} guardadas
               <br />
-              <span style={{ color: '#F59E0B' }}>{repasar} por repasar</span>
+              <span style={{ color: 'var(--medio)' }}>{repasar} por repasar</span>
             </div>
           </div>
           <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 2 }}>
@@ -63,7 +63,7 @@ export default function MapaScreen() {
                 width: d,
                 height: d,
                 borderRadius: 999,
-                border: `1px dashed rgba(255,255,255,${opacidad})`,
+                border: `1px dashed rgba(var(--stripe-rgb),${opacidad})`,
               }}
             />
           ))}
@@ -81,7 +81,7 @@ export default function MapaScreen() {
                   height: 1,
                   transformOrigin: '0 50%',
                   transform: `rotate(${n.ang}deg)`,
-                  background: 'linear-gradient(90deg, rgba(124,92,255,.45), rgba(124,92,255,.05))',
+                  background: 'linear-gradient(90deg, rgba(var(--accent-rgb),.45), rgba(var(--accent-rgb),.05))',
                   opacity: activo ? 1 : 0.16,
                   transition: 'opacity .3s',
                 }}
@@ -108,7 +108,7 @@ export default function MapaScreen() {
                   position: 'absolute',
                   inset: -10,
                   borderRadius: 999,
-                  background: 'radial-gradient(circle, rgba(124,92,255,.45) 0%, rgba(124,92,255,0) 70%)',
+                  background: 'radial-gradient(circle, rgba(var(--accent-rgb),.45) 0%, rgba(var(--accent-rgb),0) 70%)',
                   animation: 'vBreathe 3.4s ease-in-out infinite',
                 }}
               />
@@ -186,7 +186,7 @@ export default function MapaScreen() {
           justifyContent: 'center',
           cursor: 'pointer',
           zIndex: 20,
-          boxShadow: '0 10px 30px rgba(124,92,255,.45)',
+          boxShadow: '0 10px 30px rgba(var(--accent-rgb),.45)',
         }}
       >
         <IconPlus size={26} />

@@ -101,7 +101,7 @@ export default function DetalleScreen() {
             <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
               <div
                 className="mono"
-                style={{ padding: '3px 9px', borderRadius: 999, background: 'rgba(124,92,255,.16)', border: '1px solid rgba(124,92,255,.4)', fontSize: 10, fontWeight: 600, letterSpacing: '.1em', textTransform: 'uppercase', color: '#9579ff' }}
+                style={{ padding: '3px 9px', borderRadius: 999, background: 'var(--accent-ghost)', border: '1px solid var(--accent-line)', fontSize: 10, fontWeight: 600, letterSpacing: '.1em', textTransform: 'uppercase', color: 'var(--accent-strong)' }}
               >
                 {p.circulo}
               </div>
@@ -133,14 +133,14 @@ export default function DetalleScreen() {
           style={{
             padding: 16,
             borderRadius: 18,
-            background: 'linear-gradient(160deg, rgba(124,92,255,.14) 0%, #101522 55%)',
+            background: 'linear-gradient(160deg, rgba(var(--accent-rgb),.14) 0%, var(--surface-1) 55%)',
             border: '1px solid var(--accent-line)',
             display: 'flex',
             flexDirection: 'column',
             gap: 8,
           }}
         >
-          <div style={{ ...ETIQUETA, color: '#9579ff' }}>Cómo lo reconozco</div>
+          <div style={{ ...ETIQUETA, color: 'var(--accent-strong)' }}>Cómo lo reconozco</div>
           <div style={{ font: '400 16px/1.5 var(--font-sans)' }}>{p.rasgo}</div>
         </div>
 

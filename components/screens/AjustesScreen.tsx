@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useAjustes, usePersonas } from '@/lib/hooks';
 import { borrarTodo, exportarJSON, guardarAjustes } from '@/lib/repo';
 import { useApp } from '@/lib/store';
+import { guardarTema, leerTema, type Tema } from '@/lib/tema';
 import Switch from '../Switch';
 import { IconChevronRight } from '../icons';
 
@@ -14,6 +15,13 @@ export default function AjustesScreen() {
   const personas = usePersonas();
   const mostrarToast = useApp((s) => s.mostrarToast);
   const [confirmandoBorrado, setConfirmandoBorrado] = useState(false);
+  const [tema, setTema] = useState<Tema>(() => leerTema());
+
+  function onCambiarTema() {
+    const siguiente: Tema = tema === 'dark' ? 'light' : 'dark';
+    setTema(siguiente);
+    guardarTema(siguiente);
+  }
 
   const switches = [
     { key: 'recordar' as const, label: 'Repaso diario', sub: 'Cinco caras cada mañana' },
@@ -50,6 +58,19 @@ export default function AjustesScreen() {
     >
       <div style={{ font: "700 28px/1.2 var(--font-sans)", letterSpacing: '-.02em', marginBottom: 18 }}>Ajustes</div>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 22 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={ETIQUETA}>Apariencia</div>
+          <div style={{ borderRadius: 16, background: 'var(--surface-1)', border: '1px solid var(--line)', overflow: 'hidden' }}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: '14px 16px' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <div style={{ font: '400 15px var(--font-sans)' }}>Modo claro</div>
+                <div style={{ font: '400 12px var(--font-sans)', color: 'var(--fg-3)' }}>Apagado usa el tema oscuro</div>
+              </div>
+              <Switch on={tema === 'light'} onToggle={onCambiarTema} label="Modo claro" />
+            </div>
+          </div>
+        </div>
+
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           <div style={ETIQUETA}>Repaso</div>
           <div style={{ borderRadius: 16, background: 'var(--surface-1)', border: '1px solid var(--line)', overflow: 'hidden' }}>
@@ -98,7 +119,7 @@ export default function AjustesScreen() {
               onBlur={() => setConfirmandoBorrado(false)}
               style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', background: 'none', border: 'none', cursor: 'pointer' }}
             >
-              <div style={{ font: '400 15px var(--font-sans)', color: '#EF4444' }}>{confirmandoBorrado ? '¿Seguro? Toca de nuevo' : 'Borrar todo'}</div>
+              <div style={{ font: '400 15px var(--font-sans)', color: 'var(--critico)' }}>{confirmandoBorrado ? '¿Seguro? Toca de nuevo' : 'Borrar todo'}</div>
               <IconChevronRight color="var(--fg-3)" />
             </button>
           </div>

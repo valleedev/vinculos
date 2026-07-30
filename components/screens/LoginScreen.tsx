@@ -34,7 +34,7 @@ export default function LoginScreen() {
         justifyContent: 'space-between',
         padding: '120px 28px 56px',
         background:
-          'radial-gradient(120% 70% at 50% 8%, rgba(124,92,255,.20) 0%, rgba(7,10,18,0) 62%), #070A12',
+          'radial-gradient(120% 70% at 50% 8%, rgba(var(--accent-rgb),.16) 0%, rgba(var(--bg-1-rgb),0) 62%), var(--bg-1)',
       }}
     >
       <div style={{ display: 'flex', flexDirection: 'column', gap: 22, animation: 'vFadeUp .5s ease both' }}>
@@ -49,7 +49,7 @@ export default function LoginScreen() {
             justifyContent: 'center',
             font: '700 26px var(--font-mono)',
             color: '#fff',
-            boxShadow: '0 0 30px rgba(124,92,255,.35)',
+            boxShadow: '0 0 30px rgba(var(--accent-rgb),.35)',
           }}
         >
           V

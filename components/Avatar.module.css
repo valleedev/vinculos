@@ -11,7 +11,7 @@
   height: 100%;
   border-radius: 999px;
   background-color: var(--surface-2);
-  background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.055) 0 4px, transparent 4px 8px);
+  background-image: repeating-linear-gradient(135deg, rgba(var(--stripe-rgb), 0.09) 0 4px, transparent 4px 8px);
   display: flex;
   flex-direction: column;
   align-items: center;

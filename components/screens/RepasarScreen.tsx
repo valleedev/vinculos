@@ -61,7 +61,7 @@ export default function RepasarScreen() {
                   flex: 1,
                   height: 3,
                   borderRadius: 2,
-                  background: i < rIdx ? '#7C5CFF' : i === rIdx ? 'rgba(124,92,255,.5)' : 'var(--track)',
+                  background: i < rIdx ? 'var(--accent)' : i === rIdx ? 'rgba(var(--accent-rgb),.5)' : 'var(--track)',
                   transition: 'background .3s',
                 }}
               />
@@ -106,7 +106,7 @@ export default function RepasarScreen() {
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', justifyContent: 'center' }}>
                   <div
                     className="mono"
-                    style={{ padding: '4px 10px', borderRadius: 999, background: 'rgba(124,92,255,.16)', border: '1px solid rgba(124,92,255,.4)', fontSize: 11, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: '#9579ff' }}
+                    style={{ padding: '4px 10px', borderRadius: 999, background: 'var(--accent-ghost)', border: '1px solid var(--accent-line)', fontSize: 11, fontWeight: 600, letterSpacing: '.08em', textTransform: 'uppercase', color: 'var(--accent-strong)' }}
                   >
                     {cartaP.circulo}
                   </div>
@@ -131,14 +131,14 @@ export default function RepasarScreen() {
               <button
                 type="button"
                 onClick={() => responder(false)}
-                style={{ flex: 1, height: 52, border: '1px solid rgba(239,68,68,.42)', borderRadius: 16, background: 'rgba(239,68,68,.15)', color: 'var(--fg-1)', font: '600 15px var(--font-sans)', cursor: 'pointer' }}
+                style={{ flex: 1, height: 52, border: '1px solid rgba(var(--critico-rgb),.42)', borderRadius: 16, background: 'rgba(var(--critico-rgb),.15)', color: 'var(--fg-1)', font: '600 15px var(--font-sans)', cursor: 'pointer' }}
               >
                 No lo recordé
               </button>
               <button
                 type="button"
                 onClick={() => responder(true)}
-                style={{ flex: 1, height: 52, border: '1px solid rgba(34,197,94,.42)', borderRadius: 16, background: 'rgba(34,197,94,.15)', color: 'var(--fg-1)', font: '600 15px var(--font-sans)', cursor: 'pointer' }}
+                style={{ flex: 1, height: 52, border: '1px solid rgba(var(--ok-rgb),.42)', borderRadius: 16, background: 'rgba(var(--ok-rgb),.15)', color: 'var(--fg-1)', font: '600 15px var(--font-sans)', cursor: 'pointer' }}
               >
                 Lo recordé
               </button>
@@ -152,8 +152,8 @@ export default function RepasarScreen() {
 
       {listo && (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16, alignItems: 'center', paddingTop: 30, animation: 'vFadeUp .4s ease both' }}>
-          <div style={{ width: 96, height: 96, borderRadius: 999, background: 'rgba(34,197,94,.15)', border: '1px solid rgba(34,197,94,.42)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <IconCheck size={40} color="#22C55E" strokeWidth={1.9} />
+          <div style={{ width: 96, height: 96, borderRadius: 999, background: 'rgba(var(--ok-rgb),.15)', border: '1px solid rgba(var(--ok-rgb),.42)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <IconCheck size={40} color="var(--ok)" strokeWidth={1.9} />
           </div>
           <div style={{ font: "700 24px var(--font-sans)", letterSpacing: '-.02em' }}>Repaso terminado</div>
           <div className="mono" style={{ fontSize: 40, fontWeight: 600, lineHeight: 1 }}>

@@ -94,7 +94,7 @@ export default function NuevoScreen() {
           <div style={{ width: 38 }} />
         </div>
         <div style={{ height: 3, borderRadius: 2, background: 'var(--track)', overflow: 'hidden' }}>
-          <div style={{ height: '100%', width: `${(paso / 3) * 100}%`, background: 'linear-gradient(90deg,#7C5CFF,#00D4FF)', borderRadius: 2, transition: 'width .35s ease' }} />
+          <div style={{ height: '100%', width: `${(paso / 3) * 100}%`, background: 'linear-gradient(90deg, var(--accent), var(--accent-2))', borderRadius: 2, transition: 'width .35s ease' }} />
         </div>
       </div>
 
@@ -111,11 +111,11 @@ export default function NuevoScreen() {
                   width: 132,
                   height: 132,
                   borderRadius: 999,
-                  border: form.fotoDataUrl ? 'none' : '1px dashed rgba(124,92,255,.4)',
+                  border: form.fotoDataUrl ? 'none' : '1px dashed var(--accent-line)',
                   backgroundColor: 'var(--surface-1)',
                   backgroundImage: form.fotoDataUrl
                     ? `url(${form.fotoDataUrl})`
-                    : 'repeating-linear-gradient(135deg, rgba(255,255,255,.05) 0 5px, transparent 5px 10px)',
+                    : 'repeating-linear-gradient(135deg, rgba(var(--stripe-rgb),.09) 0 5px, transparent 5px 10px)',
                   backgroundSize: 'cover',
                   backgroundPosition: 'center',
                   display: 'flex',
@@ -128,7 +128,7 @@ export default function NuevoScreen() {
               >
                 {!form.fotoDataUrl && (
                   <>
-                    <IconPlus color="#7C5CFF" />
+                    <IconPlus color="var(--accent)" />
                     <div className="mono" style={{ fontSize: 9.5, fontWeight: 500, letterSpacing: '.1em', color: 'var(--fg-3)' }}>
                       AÑADIR ROSTRO
                     </div>
@@ -190,7 +190,7 @@ export default function NuevoScreen() {
                   <Chip
                     key={t}
                     label={t}
-                    variant="cian"
+                    variant="secundario"
                     active={form.temas.includes(t)}
                     onClick={() => setForm({ temas: form.temas.includes(t) ? form.temas.filter((x) => x !== t) : [...form.temas, t] })}
                     height={36}
@@ -223,7 +223,7 @@ export default function NuevoScreen() {
                 step={5}
                 value={form.cercania}
                 onChange={(e) => setForm({ cercania: Number(e.target.value) })}
-                style={{ width: '100%', accentColor: '#7C5CFF' }}
+                style={{ width: '100%', accentColor: 'var(--accent)' }}
               />
               <div style={{ font: '400 12px/1.5 var(--font-sans)', color: 'var(--fg-3)' }}>Define qué tan cerca del centro aparece en tu mapa.</div>
             </div>
@@ -231,7 +231,7 @@ export default function NuevoScreen() {
         )}
       </div>
 
-      <div style={{ padding: '14px 20px 40px', borderTop: '1px solid var(--line)', background: '#0a0e18', display: 'flex', gap: 10 }}>
+      <div style={{ padding: '14px 20px 40px', borderTop: '1px solid var(--line)', background: 'var(--bg-1)', display: 'flex', gap: 10 }}>
         {paso > 1 && (
           <button
             type="button"

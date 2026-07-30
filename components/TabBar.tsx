@@ -30,7 +30,7 @@ export default function TabBar() {
         zIndex: 25,
         padding: '8px 12px 0',
         paddingBottom: 'var(--safe-bottom)',
-        background: 'linear-gradient(180deg, rgba(7,10,18,0) 0%, rgba(7,10,18,.92) 42%, #070A12 100%)',
+        background: 'linear-gradient(180deg, rgba(var(--bg-1-rgb),0) 0%, rgba(var(--bg-1-rgb),.92) 42%, var(--bg-1) 100%)',
         borderTop: '1px solid var(--line)',
         display: 'flex',
         alignItems: 'flex-start',
@@ -59,7 +59,7 @@ export default function TabBar() {
               cursor: 'pointer',
               background: 'none',
               border: 'none',
-              color: activo ? '#7C5CFF' : '#5e677b',
+              color: activo ? 'var(--accent)' : 'var(--fg-3)',
               transition: 'color .2s',
             }}
           >

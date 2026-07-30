@@ -31,14 +31,15 @@ export default function MapaNodo({ persona, anillo, ini, corto, onClick }: MapaN
         color: 'inherit',
       }}
     >
-      <div style={{ boxShadow: '0 6px 18px rgba(0,0,0,.5)', borderRadius: 999 }}>
+      <div style={{ boxShadow: 'var(--sombra-avatar)', borderRadius: 999 }}>
         <Avatar size={50} padding={2} anillo={anillo} iniciales={ini} iniSize={15} fotoUrl={fotoUrl} />
       </div>
       <div
         style={{
           padding: '2px 7px',
           borderRadius: 6,
-          background: 'rgba(7,10,18,.75)',
+          background: 'rgba(0,0,0,.65)',
+          color: '#fff',
           fontFamily: 'var(--font-sans)',
           fontSize: 10.5,
           fontWeight: 600,

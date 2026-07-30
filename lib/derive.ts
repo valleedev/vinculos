@@ -1,8 +1,8 @@
 import { CIRCULOS, type Circulo, type Persona } from './types';
 
-export const OK = '#22C55E';
-export const MEDIO = '#F59E0B';
-export const CRITICO = '#EF4444';
+export const OK = 'var(--ok)';
+export const MEDIO = 'var(--medio)';
+export const CRITICO = 'var(--critico)';
 
 export interface FuerzaInfo {
   palabra: 'Fuerte' | 'Media' | 'Débil';

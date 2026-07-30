@@ -18,7 +18,7 @@ export default function Toast() {
         borderRadius: 16,
         background: 'var(--surface-3)',
         border: '1px solid var(--line-strong)',
-        boxShadow: '0 12px 32px rgba(0,0,0,.6)',
+        boxShadow: 'var(--sombra-tarjeta)',
         font: '500 14px var(--font-sans)',
         animation: 'vFadeUp .25s ease both',
       }}

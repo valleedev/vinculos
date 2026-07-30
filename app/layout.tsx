@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import RegistrarSW from './registrar-sw';
+import { SCRIPT_INICIO_TEMA } from '@/lib/tema';
 
 export const metadata: Metadata = {
   title: 'Vínculos',
@@ -28,13 +29,14 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: 'cover',
   userScalable: false,
-  themeColor: '#070a12',
+  themeColor: '#1f1f1f',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="es">
+    <html lang="es" suppressHydrationWarning>
       <body>
+        <script dangerouslySetInnerHTML={{ __html: SCRIPT_INICIO_TEMA }} />
         <RegistrarSW />
         {children}
       </body>
