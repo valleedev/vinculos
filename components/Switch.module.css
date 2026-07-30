@@ -1,0 +1,18 @@
+.track {
+  flex: none;
+  width: 50px;
+  height: 30px;
+  border-radius: 999px;
+  padding: 2px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border: none;
+}
+
+.knob {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: #fff;
+  transition: transform 0.2s;
+}

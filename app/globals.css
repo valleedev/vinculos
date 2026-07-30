@@ -1,0 +1,166 @@
+:root {
+  --bg-0: #04060c;
+  --bg-1: #070a12;
+  --surface-1: #101522;
+  --surface-2: #151b2b;
+  --surface-3: #1d2438;
+  --line: rgba(255, 255, 255, 0.07);
+  --line-strong: rgba(255, 255, 255, 0.13);
+  --track: rgba(255, 255, 255, 0.09);
+  --fg-1: #f5f7fa;
+  --fg-2: #8a93a6;
+  --fg-3: #5e677b;
+  --fg-4: #3c4459;
+  --accent: #7c5cff;
+  --accent-strong: #9579ff;
+  --accent-dim: #5b3fe0;
+  --accent-2: #00d4ff;
+  --accent-ghost: rgba(124, 92, 255, 0.16);
+  --accent-line: rgba(124, 92, 255, 0.4);
+  --gradient-marca: linear-gradient(135deg, #7c5cff 0%, #00d4ff 100%);
+  --ok: #22c55e;
+  --medio: #f59e0b;
+  --critico: #ef4444;
+
+  --font-sans: -apple-system, 'SF Pro Text', system-ui, sans-serif;
+  --font-mono: ui-monospace, Menlo, monospace;
+
+  --radio-chip: 999px;
+  --radio-input: 14px;
+  --radio-card: 18px;
+  --radio-repaso: 22px;
+  --radio-logo: 18px;
+  --radio-boton: 16px;
+
+  --sombra-tarjeta: 0 1px 2px rgba(0, 0, 0, 0.5), 0 10px 30px rgba(0, 0, 0, 0.32);
+  --glow-primario: 0 0 0 1px rgba(124, 92, 255, 0.4), 0 0 30px rgba(124, 92, 255, 0.3);
+
+  --safe-top: calc(env(safe-area-inset-top, 0px) + 42px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+
+  color-scheme: dark;
+}
+
+html,
+body {
+  height: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--bg-0);
+  color: var(--fg-1);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--accent-strong);
+}
+
+input,
+textarea,
+button,
+select {
+  font: inherit;
+  color: inherit;
+  outline: none;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--fg-4);
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes vFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes vFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes vPop {
+  0% {
+    opacity: 0;
+    transform: scale(0.55);
+  }
+  70% {
+    transform: scale(1.07);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes vBreathe {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.09);
+  }
+}
+@keyframes vSheet {
+  from {
+    transform: translateY(28px);
+    opacity: 0;
+  }
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+@keyframes vFlip {
+  from {
+    opacity: 0;
+    transform: rotateX(-12deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
