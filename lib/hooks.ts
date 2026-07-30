@@ -1,7 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useEffect, useMemo } from 'react';
 import { db } from './db';
-import { AJUSTES_DEFAULT } from './types';
 import type { Persona } from './types';
 
 const SIN_PERSONAS: Persona[] = [];
@@ -12,10 +11,6 @@ export function usePersonas() {
 
 export function usePersona(id: string | null) {
   return useLiveQuery(() => (id ? db.personas.get(id) : undefined), [id]);
-}
-
-export function useAjustes() {
-  return useLiveQuery(() => db.ajustes.get('default'), [], AJUSTES_DEFAULT) ?? AJUSTES_DEFAULT;
 }
 
 export function useFotoUrl(foto: Blob | undefined): string | null {

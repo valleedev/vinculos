@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useApp } from '@/lib/store';
 import { hayCredencialGuardada, registrarCredencial, verificarCredencial, webauthnSoportado } from '@/lib/webauthn';
 
@@ -8,9 +8,11 @@ export default function LoginScreen() {
   const ir = useApp((s) => s.ir);
   const mostrarToast = useApp((s) => s.mostrarToast);
   const [entrando, setEntrando] = useState(false);
+  const enCursoRef = useRef(false);
 
-  async function entrar() {
-    if (entrando) return;
+  const entrar = useCallback(async () => {
+    if (enCursoRef.current) return;
+    enCursoRef.current = true;
     setEntrando(true);
     if (!webauthnSoportado()) {
       ir('mapa');
@@ -21,7 +23,13 @@ export default function LoginScreen() {
       mostrarToast('No se pudo usar Face ID. Entrando de todos modos.');
     }
     ir('mapa');
-  }
+  }, [ir, mostrarToast]);
+
+  useEffect(() => {
+    if (webauthnSoportado() && hayCredencialGuardada()) {
+      entrar();
+    }
+  }, [entrar]);
 
   return (
     <div
@@ -78,7 +86,7 @@ export default function LoginScreen() {
             Cómo funciona
           </div>
           <div style={{ font: '400 14px/1.5 var(--font-sans)', color: 'var(--fg-2)' }}>
-            Guardas un rostro, un rasgo que lo distingue y los datos que quieres recordar. La app te los repasa antes de que se te olviden.
+            Guardas un rostro, un rasgo que lo distingue y las notas que quieras ir sumando con el tiempo.
           </div>
         </div>
         <button

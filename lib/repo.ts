@@ -1,5 +1,5 @@
 import { db } from './db';
-import { AJUSTES_DEFAULT, type Ajustes, type Persona, type PersonaForm } from './types';
+import type { Persona, PersonaForm } from './types';
 
 /**
  * Capa de datos. Hoy pega a IndexedDB (Dexie); cuando exista backend,
@@ -9,18 +9,6 @@ import { AJUSTES_DEFAULT, type Ajustes, type Persona, type PersonaForm } from '.
 
 export async function listarPersonas(): Promise<Persona[]> {
   return db.personas.toArray();
-}
-
-export async function obtenerAjustes(): Promise<Ajustes> {
-  const a = await db.ajustes.get('default');
-  if (a) return a;
-  await db.ajustes.put(AJUSTES_DEFAULT);
-  return AJUSTES_DEFAULT;
-}
-
-export async function guardarAjustes(parcial: Partial<Ajustes>): Promise<void> {
-  const actual = await obtenerAjustes();
-  await db.ajustes.put({ ...actual, ...parcial });
 }
 
 async function fotoDataUrlABlob(dataUrl: string | null): Promise<Blob | undefined> {
@@ -39,16 +27,12 @@ export async function crearPersona(form: PersonaForm): Promise<Persona> {
     foto,
     circulo: form.circulo,
     cercania: Number(form.cercania),
-    fuerza: 24,
     rasgo: form.rasgo.trim() || 'Aún no anotaste un rasgo para reconocerle.',
     donde: form.donde.trim() || 'Sin registrar',
     trabajo: 'Sin registrar',
     temas: form.temas,
-    notas: form.notas.trim() || 'Sin notas todavía.',
+    notas: form.notas,
     ultimoAt: Date.now(),
-    encuentros: [
-      { id: 'e' + Date.now(), fecha: 'Hoy', nota: 'Nos conocimos. ' + (form.donde.trim() || '') },
-    ],
   };
   await db.personas.put(persona);
   try {
@@ -70,26 +54,23 @@ export async function actualizarPersona(id: string, form: PersonaForm): Promise<
     rasgo: form.rasgo.trim() || 'Aún no anotaste un rasgo para reconocerle.',
     donde: form.donde.trim() || 'Sin registrar',
     temas: form.temas,
-    notas: form.notas.trim() || 'Sin notas todavía.',
+    notas: form.notas,
   });
 }
 
-export async function registrarEncuentro(id: string): Promise<void> {
+export async function agregarNota(id: string, texto: string): Promise<void> {
+  const limpio = texto.trim();
+  if (!limpio) return;
   const p = await db.personas.get(id);
   if (!p) return;
-  const encuentro = { id: 'e' + Date.now(), fecha: 'Hoy', nota: 'Nos vimos. Toca añadir el detalle.' };
-  await db.personas.update(id, {
-    ultimoAt: Date.now(),
-    fuerza: Math.min(100, p.fuerza + 6),
-    encuentros: [encuentro, ...p.encuentros],
-  });
+  const nota = { id: 'nt' + Date.now(), texto: limpio, creadoEn: Date.now() };
+  await db.personas.update(id, { notas: [nota, ...p.notas] });
 }
 
-export async function responderRepaso(id: string, acerto: boolean): Promise<void> {
+export async function borrarNota(id: string, notaId: string): Promise<void> {
   const p = await db.personas.get(id);
   if (!p) return;
-  const delta = acerto ? 10 : -7;
-  await db.personas.update(id, { fuerza: Math.max(6, Math.min(100, p.fuerza + delta)) });
+  await db.personas.update(id, { notas: p.notas.filter((n) => n.id !== notaId) });
 }
 
 export async function borrarTodo(): Promise<void> {

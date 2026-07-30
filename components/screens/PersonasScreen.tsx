@@ -2,14 +2,13 @@
 
 import { useApp } from '@/lib/store';
 import { usePersonas, useFotoUrl } from '@/lib/hooks';
-import { buscar, fz, iniciales } from '@/lib/derive';
+import { buscar, iniciales } from '@/lib/derive';
 import type { Persona } from '@/lib/types';
 import Avatar from '../Avatar';
 import { IconLupa } from '../icons';
 
 function Fila({ p, onClick }: { p: Persona; onClick: () => void }) {
   const fotoUrl = useFotoUrl(p.foto);
-  const f = fz(p.fuerza);
   return (
     <div
       onClick={onClick}
@@ -27,18 +26,13 @@ function Fila({ p, onClick }: { p: Persona; onClick: () => void }) {
         cursor: 'pointer',
       }}
     >
-      <Avatar size={46} padding={2} anillo={f.color} iniciales={iniciales(p.nombre)} iniSize={13} fotoUrl={fotoUrl} />
+      <Avatar size={46} padding={2} anillo="var(--line-strong)" iniciales={iniciales(p.nombre)} iniSize={13} fotoUrl={fotoUrl} />
       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 3 }}>
         <div style={{ font: '600 15.5px var(--font-sans)' }}>{p.nombre}</div>
         <div style={{ font: '400 12.5px/1.35 var(--font-sans)', color: 'var(--fg-2)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.rasgo}</div>
       </div>
-      <div style={{ flex: 'none', textAlign: 'right', display: 'flex', flexDirection: 'column', gap: 4, alignItems: 'flex-end' }}>
-        <div className="mono" style={{ fontSize: 10, fontWeight: 600, letterSpacing: '.1em', textTransform: 'uppercase', color: f.color }}>
-          {f.palabra}
-        </div>
-        <div className="mono" style={{ fontSize: 10, fontWeight: 500, color: 'var(--fg-4)' }}>
-          {p.circulo}
-        </div>
+      <div className="mono" style={{ flex: 'none', fontSize: 10, fontWeight: 500, color: 'var(--fg-4)' }}>
+        {p.circulo}
       </div>
     </div>
   );

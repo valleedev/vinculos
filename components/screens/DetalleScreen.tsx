@@ -1,41 +1,35 @@
 'use client';
 
+import { useState } from 'react';
 import { useApp } from '@/lib/store';
 import { usePersona, useFotoUrl } from '@/lib/hooks';
-import { apodoTexto, fz, iniciales, mazoRepaso, relativo } from '@/lib/derive';
-import { registrarEncuentro } from '@/lib/repo';
+import { apodoTexto, iniciales, relativo } from '@/lib/derive';
+import { agregarNota, borrarNota } from '@/lib/repo';
 import Avatar from '../Avatar';
 import IconButton from '../IconButton';
-import { IconChevronLeft, IconPencil } from '../icons';
+import { IconChevronLeft, IconPencil, IconX } from '../icons';
 
 const ETIQUETA = { fontFamily: 'var(--font-mono)', fontSize: 11, fontWeight: 600, letterSpacing: '.14em', textTransform: 'uppercase' as const, color: 'var(--fg-3)' };
+const CAMPO_INPUT: React.CSSProperties = {
+  height: 44,
+  padding: '0 14px',
+  borderRadius: 12,
+  border: '1px solid var(--line)',
+  background: 'var(--surface-2)',
+  font: '400 14px var(--font-sans)',
+};
 
 export default function DetalleScreen() {
   const selId = useApp((s) => s.selId);
   const volverMapa = useApp((s) => s.volverMapa);
   const setForm = useApp((s) => s.setForm);
   const abrirEdicion = useApp((s) => s.abrirEdicion);
-  const ir = useApp((s) => s.ir);
-  const iniciarDeck = useApp((s) => s.iniciarDeck);
-  const mostrarToast = useApp((s) => s.mostrarToast);
+  const [notaDraft, setNotaDraft] = useState('');
 
   const p = usePersona(selId);
   const fotoUrl = useFotoUrl(p?.foto);
 
   if (!p) return null;
-  const f = fz(p.fuerza);
-
-  async function onRegistrarEncuentro() {
-    if (!p) return;
-    await registrarEncuentro(p.id);
-    mostrarToast(`Encuentro con ${p.nombre.split(' ')[0]} registrado.`);
-  }
-
-  function onRepasar() {
-    if (!p) return;
-    iniciarDeck(mazoRepaso([], p.id));
-    ir('repasar');
-  }
 
   function onEditar() {
     if (!p) return;
@@ -53,11 +47,16 @@ export default function DetalleScreen() {
     abrirEdicion(p.id);
   }
 
+  function onAgregarNota() {
+    if (!p || !notaDraft.trim()) return;
+    agregarNota(p.id, notaDraft);
+    setNotaDraft('');
+  }
+
   const datos = [
     { k: 'Dónde', v: p.donde },
     { k: 'Trabajo', v: p.trabajo },
     { k: 'Círculo', v: p.circulo },
-    { k: 'Notas', v: p.notas },
   ];
   const temas = p.temas.length ? p.temas : ['Sin temas anotados'];
 
@@ -94,7 +93,7 @@ export default function DetalleScreen() {
 
       <div style={{ padding: '22px 20px 110px', display: 'flex', flexDirection: 'column', gap: 20 }}>
         <div style={{ display: 'flex', gap: 16, alignItems: 'center' }}>
-          <Avatar size={88} padding={3} anillo={f.color} iniciales={iniciales(p.nombre)} iniSize={22} microLabel="FOTO" fotoUrl={fotoUrl} />
+          <Avatar size={88} padding={3} anillo="var(--line-strong)" iniciales={iniciales(p.nombre)} iniSize={22} microLabel="FOTO" fotoUrl={fotoUrl} />
           <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
             <div style={{ font: "700 25px/1.15 var(--font-sans)", letterSpacing: '-.02em' }}>{p.nombre}</div>
             <div style={{ font: '400 14px var(--font-sans)', color: 'var(--fg-2)' }}>{apodoTexto(p.apodo)}</div>
@@ -109,23 +108,6 @@ export default function DetalleScreen() {
                 visto {relativo(p.ultimoAt)}
               </div>
             </div>
-          </div>
-        </div>
-
-        <div style={{ padding: '14px 16px', borderRadius: 16, background: 'var(--surface-1)', border: '1px solid var(--line)', display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={ETIQUETA}>Memoria</div>
-            <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-              <span className="mono" style={{ fontSize: 11, fontWeight: 600, letterSpacing: '.1em', textTransform: 'uppercase', color: f.color }}>
-                {f.palabra}
-              </span>
-              <span className="mono" style={{ fontSize: 14, fontWeight: 600, color: 'var(--fg-1)' }}>
-                {p.fuerza}%
-              </span>
-            </div>
-          </div>
-          <div style={{ height: 6, borderRadius: 3, background: 'var(--track)', overflow: 'hidden' }}>
-            <div style={{ height: '100%', width: `${p.fuerza}%`, borderRadius: 3, background: f.color, transition: 'width .4s ease' }} />
           </div>
         </div>
 
@@ -169,41 +151,56 @@ export default function DetalleScreen() {
           </div>
         </div>
 
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <div style={ETIQUETA}>Encuentros</div>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {p.encuentros.map((e, i) => (
-              <div key={e.id} style={{ display: 'flex', gap: 14 }}>
-                <div style={{ flex: 'none', width: 12, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                  <div style={{ width: 8, height: 8, borderRadius: 999, background: 'var(--accent)', marginTop: 6 }} />
-                  {i < p.encuentros.length - 1 && <div style={{ flex: 1, width: 1, background: 'var(--line)' }} />}
-                </div>
-                <div style={{ flex: 1, paddingBottom: 16, display: 'flex', flexDirection: 'column', gap: 3 }}>
-                  <div className="mono" style={{ fontSize: 12, fontWeight: 600, letterSpacing: '.06em', color: 'var(--fg-2)' }}>
-                    {e.fecha}
-                  </div>
-                  <div style={{ font: '400 14px/1.45 var(--font-sans)' }}>{e.nota}</div>
-                </div>
-              </div>
-            ))}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={ETIQUETA}>Notas</div>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <input
+              value={notaDraft}
+              onChange={(e) => setNotaDraft(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  onAgregarNota();
+                }
+              }}
+              placeholder="Agregar una nota…"
+              style={{ ...CAMPO_INPUT, flex: 1 }}
+            />
+            <button
+              type="button"
+              onClick={onAgregarNota}
+              style={{ flex: 'none', padding: '0 16px', borderRadius: 12, border: 'none', background: 'var(--surface-2)', color: 'var(--fg-1)', font: '600 13px var(--font-sans)', cursor: 'pointer' }}
+            >
+              Agregar
+            </button>
           </div>
-        </div>
-
-        <div style={{ display: 'flex', gap: 10 }}>
-          <button
-            type="button"
-            onClick={onRegistrarEncuentro}
-            style={{ flex: 1, height: 52, border: '1px solid var(--line-strong)', borderRadius: 16, background: 'var(--surface-2)', color: 'var(--fg-1)', font: '600 15px var(--font-sans)', cursor: 'pointer' }}
-          >
-            Registrar encuentro
-          </button>
-          <button
-            type="button"
-            onClick={onRepasar}
-            style={{ flex: 1, height: 52, border: 'none', borderRadius: 16, background: 'var(--accent)', color: '#fff', font: '600 15px var(--font-sans)', cursor: 'pointer' }}
-          >
-            Repasar
-          </button>
+          {p.notas.length === 0 ? (
+            <div style={{ font: '400 13px var(--font-sans)', color: 'var(--fg-3)' }}>Sin notas todavía.</div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {p.notas.map((n) => (
+                <div
+                  key={n.id}
+                  style={{ display: 'flex', alignItems: 'flex-start', gap: 10, padding: '10px 14px', borderRadius: 14, background: 'var(--surface-1)', border: '1px solid var(--line)' }}
+                >
+                  <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 3 }}>
+                    <div style={{ font: '400 14px/1.45 var(--font-sans)' }}>{n.texto}</div>
+                    <div className="mono" style={{ fontSize: 10.5, fontWeight: 500, color: 'var(--fg-4)' }}>
+                      {relativo(n.creadoEn)}
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => borrarNota(p.id, n.id)}
+                    aria-label="Borrar nota"
+                    style={{ flex: 'none', width: 24, height: 24, borderRadius: 999, border: 'none', background: 'var(--surface-3)', color: 'var(--fg-2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    <IconX size={11} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

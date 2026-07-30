@@ -1,19 +1,4 @@
-import { CIRCULOS, type Circulo, type Persona } from './types';
-
-export const OK = 'var(--ok)';
-export const MEDIO = 'var(--medio)';
-export const CRITICO = 'var(--critico)';
-
-export interface FuerzaInfo {
-  palabra: 'Fuerte' | 'Media' | 'Débil';
-  color: string;
-}
-
-export function fz(fuerza: number): FuerzaInfo {
-  if (fuerza >= 75) return { palabra: 'Fuerte', color: OK };
-  if (fuerza >= 45) return { palabra: 'Media', color: MEDIO };
-  return { palabra: 'Débil', color: CRITICO };
-}
+import { CIRCULOS_BASE, type Persona } from './types';
 
 export function iniciales(nombre: string): string {
   return nombre.trim().split(/\s+/).slice(0, 2).map((w) => w[0] ?? '').join('').toUpperCase();
@@ -47,6 +32,14 @@ export function relativo(ts: number): string {
   return `hace ${Math.floor(dias / 30)} meses`;
 }
 
+/** Antepone los círculos sugeridos (en su orden canónico) y deja los personalizados alfabéticos al final. */
+export function ordenarCirculos(circulos: string[]): string[] {
+  const set = new Set(circulos);
+  const base = CIRCULOS_BASE.filter((c) => set.has(c));
+  const extra = circulos.filter((c) => !CIRCULOS_BASE.includes(c)).sort((a, b) => a.localeCompare(b));
+  return [...base, ...extra];
+}
+
 export interface NodoMapa {
   persona: Persona;
   px: number;
@@ -67,10 +60,11 @@ export function layoutMapa(personas: Persona[]): NodoMapa[] {
     (grupos[p.circulo] = grupos[p.circulo] || []).push(p);
   });
 
-  const sector = 360 / CIRCULOS.length;
+  const gruposUsados = ordenarCirculos(Object.keys(grupos));
+  const sector = 360 / gruposUsados.length;
   const pts: { p: Persona; x: number; y: number }[] = [];
 
-  CIRCULOS.forEach((c, gi) => {
+  gruposUsados.forEach((c, gi) => {
     const lista = grupos[c] || [];
     lista.forEach((p, i) => {
       const spread = sector * 0.9;
@@ -123,10 +117,6 @@ export function layoutMapa(personas: Persona[]): NodoMapa[] {
   });
 }
 
-export function porRepasar(personas: Persona[]): number {
-  return personas.filter((p) => p.fuerza < 60).length;
-}
-
 export function buscar(personas: Persona[], q: string): Persona[] {
   const term = q.trim().toLowerCase();
   return personas
@@ -138,13 +128,4 @@ export function buscar(personas: Persona[], q: string): Persona[] {
           .includes(term)
     )
     .sort((a, b) => a.nombre.localeCompare(b.nombre));
-}
-
-export function mazoRepaso(personas: Persona[], soloId?: string): string[] {
-  if (soloId) return [soloId];
-  return [...personas].sort((a, b) => a.fuerza - b.fuerza).slice(0, 5).map((p) => p.id);
-}
-
-export function circuloValido(c: string): c is Circulo {
-  return (CIRCULOS as string[]).includes(c);
 }

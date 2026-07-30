@@ -1,14 +1,11 @@
 'use client';
 
 import { useApp } from '@/lib/store';
-import { mazoRepaso } from '@/lib/derive';
-import { usePersonas } from '@/lib/hooks';
 import { IconTab } from './icons';
 import type { Screen } from '@/lib/types';
 
-const TABS: { key: Screen; label: string; icon: 'mapa' | 'repasar' | 'personas' | 'ajustes' }[] = [
+const TABS: { key: Screen; label: string; icon: 'mapa' | 'personas' | 'ajustes' }[] = [
   { key: 'mapa', label: 'Mapa', icon: 'mapa' },
-  { key: 'repasar', label: 'Repasar', icon: 'repasar' },
   { key: 'personas', label: 'Todas', icon: 'personas' },
   { key: 'ajustes', label: 'Ajustes', icon: 'ajustes' },
 ];
@@ -16,8 +13,6 @@ const TABS: { key: Screen; label: string; icon: 'mapa' | 'repasar' | 'personas' 
 export default function TabBar() {
   const screen = useApp((s) => s.screen);
   const ir = useApp((s) => s.ir);
-  const iniciarDeck = useApp((s) => s.iniciarDeck);
-  const personas = usePersonas();
 
   return (
     <div
@@ -45,10 +40,7 @@ export default function TabBar() {
             type="button"
             aria-label={t.label}
             aria-current={activo ? 'page' : undefined}
-            onClick={() => {
-              if (t.key === 'repasar') iniciarDeck(mazoRepaso(personas ?? []));
-              ir(t.key);
-            }}
+            onClick={() => ir(t.key)}
             style={{
               flex: 1,
               display: 'flex',

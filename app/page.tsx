@@ -7,7 +7,6 @@ import LoginScreen from '@/components/screens/LoginScreen';
 import MapaScreen from '@/components/screens/MapaScreen';
 import DetalleScreen from '@/components/screens/DetalleScreen';
 import NuevoScreen from '@/components/screens/NuevoScreen';
-import RepasarScreen from '@/components/screens/RepasarScreen';
 import PersonasScreen from '@/components/screens/PersonasScreen';
 import AjustesScreen from '@/components/screens/AjustesScreen';
 
@@ -20,7 +19,6 @@ export default function Home() {
       {screen === 'login' && <LoginScreen />}
       {screen === 'mapa' && <MapaScreen />}
       {screen === 'personas' && <PersonasScreen />}
-      {screen === 'repasar' && <RepasarScreen />}
       {screen === 'ajustes' && <AjustesScreen />}
       {screen === 'detalle' && <DetalleScreen />}
       {screen === 'nuevo' && <NuevoScreen />}

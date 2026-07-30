@@ -1,16 +1,16 @@
-export type Circulo = 'Trabajo' | 'Familia' | 'Barrio' | 'Gimnasio' | 'Cursos';
+export type Circulo = string;
 
-export const CIRCULOS: Circulo[] = ['Trabajo', 'Familia', 'Barrio', 'Gimnasio', 'Cursos'];
+export const CIRCULOS_BASE = ['Trabajo', 'Familia', 'Barrio', 'Gimnasio', 'Cursos'];
 
 export const TEMAS = [
   'Café', 'Perros', 'Gatos', 'Cine', 'Correr', 'Cerámica',
   'Viajes', 'Música', 'Plantas', 'Cocina', 'Fútbol', 'Videojuegos',
 ] as const;
 
-export interface Encuentro {
+export interface Nota {
   id: string;
-  fecha: string;
-  nota: string;
+  texto: string;
+  creadoEn: number;
 }
 
 export interface Persona {
@@ -20,31 +20,15 @@ export interface Persona {
   foto?: Blob;
   circulo: Circulo;
   cercania: number;
-  fuerza: number;
   rasgo: string;
   donde: string;
   trabajo: string;
   temas: string[];
-  notas: string;
-  ultimoAt: number; // epoch ms del último encuentro; "ultimo" (relativo) se deriva
-  encuentros: Encuentro[];
+  notas: Nota[];
+  ultimoAt: number; // epoch ms de creación; "ultimo" (relativo) se deriva
 }
 
-export interface Ajustes {
-  id: 'default';
-  recordar: boolean;
-  mezclar: boolean;
-  notif: boolean;
-}
-
-export const AJUSTES_DEFAULT: Ajustes = {
-  id: 'default',
-  recordar: true,
-  mezclar: true,
-  notif: false,
-};
-
-export type Screen = 'login' | 'mapa' | 'personas' | 'repasar' | 'ajustes' | 'detalle' | 'nuevo';
+export type Screen = 'login' | 'mapa' | 'personas' | 'ajustes' | 'detalle' | 'nuevo';
 
 export interface PersonaForm {
   nombre: string;
@@ -53,12 +37,12 @@ export interface PersonaForm {
   rasgo: string;
   donde: string;
   temas: string[];
-  notas: string;
+  notas: Nota[];
   cercania: number;
   fotoDataUrl: string | null;
 }
 
 export const FORM_VACIO: PersonaForm = {
   nombre: '', apodo: '', circulo: 'Trabajo', rasgo: '', donde: '',
-  temas: [], notas: '', cercania: 70, fotoDataUrl: null,
+  temas: [], notas: [], cercania: 70, fotoDataUrl: null,
 };

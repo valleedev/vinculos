@@ -10,10 +10,6 @@ interface AppState {
   q: string;
   paso: 1 | 2 | 3;
   form: PersonaForm;
-  deckIds: string[] | null;
-  rIdx: number;
-  rRev: boolean;
-  aciertos: number;
   toast: string;
   lastTab: Screen;
 
@@ -32,9 +28,6 @@ interface AppState {
   guardadoOk: () => void;
   mostrarToast: (mensaje: string) => void;
   limpiarToast: () => void;
-  iniciarDeck: (ids: string[]) => void;
-  revelar: () => void;
-  avanzarCarta: (acerto: boolean) => void;
 }
 
 let toastTimer: ReturnType<typeof setTimeout> | undefined;
@@ -49,15 +42,11 @@ export const useApp = create<AppState>()(
       q: '',
       paso: 1,
       form: FORM_VACIO,
-      deckIds: null,
-      rIdx: 0,
-      rRev: false,
-      aciertos: 0,
       toast: '',
       lastTab: 'mapa',
 
       ir: (screen) => {
-        const esTab = screen === 'mapa' || screen === 'repasar' || screen === 'personas' || screen === 'ajustes';
+        const esTab = screen === 'mapa' || screen === 'personas' || screen === 'ajustes';
         set({ screen, selId: null, ...(esTab ? { lastTab: screen } : {}) });
       },
       abrirDetalle: (id) => set({ screen: 'detalle', selId: id, editId: null }),
@@ -78,10 +67,6 @@ export const useApp = create<AppState>()(
         toastTimer = setTimeout(() => set({ toast: '' }), 2400);
       },
       limpiarToast: () => set({ toast: '' }),
-      iniciarDeck: (ids) => set({ deckIds: ids, rIdx: 0, rRev: false, aciertos: 0 }),
-      revelar: () => set({ rRev: true }),
-      avanzarCarta: (acerto) =>
-        set((s) => ({ rIdx: s.rIdx + 1, rRev: false, aciertos: s.aciertos + (acerto ? 1 : 0) })),
     }),
     {
       name: 'vinculos-draft',

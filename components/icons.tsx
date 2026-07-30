@@ -62,8 +62,6 @@ export function IconChevronRight({ size = 18, strokeWidth = 1.9, className, colo
 
 const TAB_PATHS: Record<string, string> = {
   mapa: '<circle cx="7" cy="6" r="2.2"></circle><circle cx="7" cy="18" r="2.2"></circle><circle cx="17" cy="7.5" r="2.2"></circle><path d="M7 8.2v7.6M17 9.7c0 4.3-4.2 3.2-4.2 7.3"></path>',
-  repasar:
-    '<path d="M12 6.2A3 3 0 0 0 6.5 8a3 3 0 0 0-1.3 5.4A3 3 0 0 0 9 18a3 3 0 0 0 3-1.4 3 3 0 0 0 3 1.4 3 3 0 0 0 3.8-4.6A3 3 0 0 0 17.5 8 3 3 0 0 0 12 6.2Z"></path><path d="M12 6.2v11.4"></path>',
   personas:
     '<rect x="3.4" y="3.4" width="7.2" height="7.2" rx="1.3"></rect><rect x="13.4" y="3.4" width="7.2" height="7.2" rx="1.3"></rect><rect x="3.4" y="13.4" width="7.2" height="7.2" rx="1.3"></rect><rect x="13.4" y="13.4" width="7.2" height="7.2" rx="1.3"></rect>',
   ajustes:

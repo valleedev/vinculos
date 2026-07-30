@@ -1,8 +1,8 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { useApp } from '@/lib/store';
-import { CIRCULOS, TEMAS } from '@/lib/types';
+import { CIRCULOS_BASE, TEMAS, type Nota } from '@/lib/types';
 import { cercaniaTexto } from '@/lib/derive';
 import { actualizarPersona, crearPersona } from '@/lib/repo';
 import { recortarYRedimensionar } from '@/lib/imagen';
@@ -28,6 +28,10 @@ const CAMPO_TEXTAREA: React.CSSProperties = {
   resize: 'none',
 };
 
+function crearNotaId() {
+  return 'nt' + Date.now() + Math.random().toString(36).slice(2, 6);
+}
+
 export default function NuevoScreen() {
   const paso = useApp((s) => s.paso);
   const form = useApp((s) => s.form);
@@ -40,6 +44,7 @@ export default function NuevoScreen() {
   const guardadoOk = useApp((s) => s.guardadoOk);
   const abrirDetalle = useApp((s) => s.abrirDetalle);
   const fileRef = useRef<HTMLInputElement>(null);
+  const [notaDraft, setNotaDraft] = useState('');
 
   async function onArchivo(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
@@ -51,6 +56,18 @@ export default function NuevoScreen() {
     } catch {
       mostrarToast('No se pudo procesar la foto.');
     }
+  }
+
+  function agregarNotaDraft() {
+    const texto = notaDraft.trim();
+    if (!texto) return;
+    const nota: Nota = { id: crearNotaId(), texto, creadoEn: Date.now() };
+    setForm({ notas: [nota, ...form.notas] });
+    setNotaDraft('');
+  }
+
+  function quitarNotaDraft(id: string) {
+    setForm({ notas: form.notas.filter((n) => n.id !== id) });
   }
 
   async function guardar() {
@@ -72,10 +89,15 @@ export default function NuevoScreen() {
       mostrarToast('¿Cómo se llama? Sin nombre no puedo guardarlo.');
       return;
     }
+    if (paso === 2 && esOtro && !form.circulo.trim()) {
+      mostrarToast('Ponle un nombre a tu círculo.');
+      return;
+    }
     if (paso < 3) siguientePaso();
     else guardar();
   }
 
+  const esOtro = !CIRCULOS_BASE.includes(form.circulo);
   const ctaTxt = paso === 3 ? 'Guardar persona' : 'Continuar';
   const ctaDeshabilitada = paso === 1 && !form.nombre.trim();
   const cerca = Number(form.cercania);
@@ -103,7 +125,7 @@ export default function NuevoScreen() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20, animation: 'vFadeUp .3s ease both' }}>
             <div style={{ font: "700 26px/1.2 var(--font-sans)", letterSpacing: '-.02em' }}>¿A quién acabas de conocer?</div>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
-              <input ref={fileRef} type="file" accept="image/*" capture="user" onChange={onArchivo} style={{ display: 'none' }} />
+              <input ref={fileRef} type="file" accept="image/*" onChange={onArchivo} style={{ display: 'none' }} />
               <button
                 type="button"
                 onClick={() => fileRef.current?.click()}
@@ -172,10 +194,19 @@ export default function NuevoScreen() {
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <div style={ETIQUETA}>Círculo</div>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
-                {CIRCULOS.map((c) => (
+                {CIRCULOS_BASE.map((c) => (
                   <Chip key={c} label={c} active={form.circulo === c} onClick={() => setForm({ circulo: c })} height={38} fontSize={13.5} padding="0 15px" />
                 ))}
+                <Chip label="Otro" active={esOtro} onClick={() => setForm({ circulo: '' })} height={38} fontSize={13.5} padding="0 15px" />
               </div>
+              {esOtro && (
+                <input
+                  value={form.circulo}
+                  onChange={(e) => setForm({ circulo: e.target.value })}
+                  placeholder="Nombre de tu círculo"
+                  style={{ ...CAMPO_INPUT, marginTop: 2 }}
+                />
+              )}
             </div>
           </div>
         )}
@@ -200,14 +231,49 @@ export default function NuevoScreen() {
                 ))}
               </div>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               <div style={ETIQUETA}>Notas</div>
-              <textarea
-                value={form.notas}
-                onChange={(e) => setForm({ notas: e.target.value })}
-                placeholder="Tiene una hija, Elena. Es alérgica a los frutos secos. Odia que le digan Cami en el trabajo."
-                style={{ ...CAMPO_TEXTAREA, minHeight: 96 }}
-              />
+              <div style={{ display: 'flex', gap: 8 }}>
+                <input
+                  value={notaDraft}
+                  onChange={(e) => setNotaDraft(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') {
+                      e.preventDefault();
+                      agregarNotaDraft();
+                    }
+                  }}
+                  placeholder="Tiene una hija, Elena…"
+                  style={{ ...CAMPO_INPUT, flex: 1 }}
+                />
+                <button
+                  type="button"
+                  onClick={agregarNotaDraft}
+                  style={{ flex: 'none', padding: '0 18px', borderRadius: 14, border: 'none', background: 'var(--surface-2)', color: 'var(--fg-1)', font: '600 14px var(--font-sans)', cursor: 'pointer' }}
+                >
+                  Agregar
+                </button>
+              </div>
+              {form.notas.length > 0 && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  {form.notas.map((n) => (
+                    <div
+                      key={n.id}
+                      style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', borderRadius: 14, background: 'var(--surface-2)', border: '1px solid var(--line)' }}
+                    >
+                      <div style={{ flex: 1, font: '400 14px/1.4 var(--font-sans)' }}>{n.texto}</div>
+                      <button
+                        type="button"
+                        onClick={() => quitarNotaDraft(n.id)}
+                        aria-label="Quitar nota"
+                        style={{ flex: 'none', width: 24, height: 24, borderRadius: 999, border: 'none', background: 'var(--surface-3)', color: 'var(--fg-2)', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                      >
+                        <IconX size={11} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

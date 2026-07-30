@@ -1,15 +1,13 @@
 import Dexie, { type EntityTable } from 'dexie';
-import type { Ajustes, Persona } from './types';
+import type { Persona } from './types';
 
 class VinculosDB extends Dexie {
   personas!: EntityTable<Persona, 'id'>;
-  ajustes!: EntityTable<Ajustes, 'id'>;
 
   constructor() {
     super('vinculos');
     this.version(1).stores({
-      personas: 'id, nombre, circulo, fuerza, ultimoAt',
-      ajustes: 'id',
+      personas: 'id, nombre, circulo, ultimoAt',
     });
   }
 }

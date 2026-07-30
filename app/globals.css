@@ -25,10 +25,6 @@
   --accent-line: rgba(35, 131, 226, 0.4);
   --gradient-marca: linear-gradient(135deg, #2383e2 0%, #9065b0 100%);
 
-  --ok: #4dab6c;
-  --ok-rgb: 77, 171, 108;
-  --medio: #d9730d;
-  --medio-rgb: 217, 115, 13;
   --critico: #e6553f;
   --critico-rgb: 230, 85, 63;
 
@@ -65,10 +61,6 @@
   --accent-line: rgba(35, 131, 226, 0.35);
   --gradient-marca: linear-gradient(135deg, #2383e2 0%, #9065b0 100%);
 
-  --ok: #448361;
-  --ok-rgb: 68, 131, 97;
-  --medio: #d9730d;
-  --medio-rgb: 217, 115, 13;
   --critico: #e03e3e;
   --critico-rgb: 224, 62, 62;
 
@@ -86,7 +78,6 @@
   --radio-chip: 999px;
   --radio-input: 14px;
   --radio-card: 18px;
-  --radio-repaso: 22px;
   --radio-logo: 18px;
   --radio-boton: 16px;
 

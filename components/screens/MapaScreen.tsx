@@ -3,8 +3,7 @@
 import { useMemo } from 'react';
 import { useApp } from '@/lib/store';
 import { usePersonas } from '@/lib/hooks';
-import { CIRCULOS } from '@/lib/types';
-import { fz, iniciales, layoutMapa, nombreCorto, porRepasar } from '@/lib/derive';
+import { iniciales, layoutMapa, nombreCorto, ordenarCirculos } from '@/lib/derive';
 import Chip from '../Chip';
 import { IconPlus } from '../icons';
 import MapaNodo from '../MapaNodo';
@@ -23,8 +22,8 @@ export default function MapaScreen() {
   const abrirDetalle = useApp((s) => s.abrirDetalle);
 
   const nodos = useMemo(() => layoutMapa(personas), [personas]);
+  const circulosPresentes = useMemo(() => ordenarCirculos([...new Set(personas.map((p) => p.circulo))]), [personas]);
   const total = personas.length;
-  const repasar = porRepasar(personas);
 
   return (
     <>
@@ -39,13 +38,11 @@ export default function MapaScreen() {
             </div>
             <div className="mono" style={{ textAlign: 'right', fontSize: 12, fontWeight: 600, color: 'var(--fg-2)' }}>
               {total} guardadas
-              <br />
-              <span style={{ color: 'var(--medio)' }}>{repasar} por repasar</span>
             </div>
           </div>
           <div style={{ display: 'flex', gap: 8, overflowX: 'auto', paddingBottom: 2 }}>
             <Chip label="Todos" active={filtro === 'Todos'} onClick={() => setFiltro('Todos')} />
-            {CIRCULOS.map((c) => (
+            {circulosPresentes.map((c) => (
               <Chip key={c} label={c} active={filtro === c} onClick={() => setFiltro(c)} />
             ))}
           </div>
@@ -133,7 +130,6 @@ export default function MapaScreen() {
 
           {nodos.map((n) => {
             const activo = filtro === 'Todos' || filtro === n.persona.circulo;
-            const f = fz(n.persona.fuerza);
             return (
               <div
                 key={n.persona.id}
@@ -150,7 +146,7 @@ export default function MapaScreen() {
               >
                 <MapaNodo
                   persona={n.persona}
-                  anillo={f.color}
+                  anillo="var(--line-strong)"
                   ini={iniciales(n.persona.nombre)}
                   corto={nombreCorto(n.persona.nombre)}
                   onClick={() => abrirDetalle(n.persona.id)}
